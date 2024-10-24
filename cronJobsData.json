@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "url": "https://rp55.xyz/app/akoo_2024_04_V2/shopify/shopify_product_delete.php",
+    "minute": "1",
+    "logs": []
+  },
+  {
+    "id": 2,
+    "url": "https://rp55.xyz/app/akoo_2024_04_V2/shopify/shopify_productentry.php",
+    "minute": "1",
+    "logs": []
+  },
+  {
+    "id": 5,
+    "url": "https://rp55.xyz/app/akoo_2024_04_V2/shopify/shopify_productimages.php",
+    "minute": "5",
+    "logs": []
+  }
+]
