@@ -126,10 +126,12 @@ app.post('/schedule', (req, res) => {
     res.json(cronJobs.map(({ task, ...rest }) => rest));
 });
 
+// Endpoint to retrieve all cron jobs
 app.get('/jobs', (req, res) => {
     res.json(cronJobs.map(({ task, ...rest }) => rest));
 });
 
+// Endpoint to delete a cron job
 app.delete('/jobs/:id', (req, res) => {
     const jobId = parseInt(req.params.id);
     const jobIndex = cronJobs.findIndex(job => job.id === jobId);
@@ -144,6 +146,7 @@ app.delete('/jobs/:id', (req, res) => {
     res.json(cronJobs.map(({ task, ...rest }) => rest));
 });
 
+// Endpoint to update an existing cron job (Edit)
 app.put('/jobs/:id', (req, res) => {
     const jobId = parseInt(req.params.id);
     const { name = 'Untitled', description = 'No description', minute, url } = req.body;
