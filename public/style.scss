@@ -1,0 +1,18 @@
+$w:#fff;
+body {
+    
+    background-color: $w;
+    min-height: 100vh;
+    @import "scss/custom";
+    /* Responsive design for desktop, tablet, and mobile */
+    @media (min-width: 1200px) {
+        @import "scss/desktop";
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {
+        @import "scss/ipad";
+    }
+    @media (max-width: 767px) {
+        @import "scss/mobile";
+    }
+
+}

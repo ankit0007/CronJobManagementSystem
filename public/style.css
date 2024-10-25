@@ -1,0 +1,86 @@
+body {
+  background-color: #fff;
+  min-height: 100vh;
+  /* Responsive design for desktop, tablet, and mobile */
+}
+body .container {
+  max-width: 100%;
+}
+body .card-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; /* Center the boxes horizontally */
+  gap: 1rem; /* Space between boxes */
+}
+body .card-container .card-item {
+  margin-bottom: 0rem;
+}
+body .card-container .card-item .JobTitles {
+  background: #ccc;
+  font-size: 1.1rem;
+  color: #000;
+  padding: 1rem;
+}
+body .card-container .card-item .job-card {
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 0px;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 100%;
+}
+body .card-container .card-item .job-card .jobdetails {
+  padding: 1rem;
+}
+body .card-container .card-item .job-card .jobdetails .links {
+  background: #ccc;
+}
+body .card-container .card-item .job-card p a {
+  word-break: break-all; /* To prevent long URLs from overflowing */
+}
+body .card-container .card-item .job-card .justify-content-end {
+  display: -ms-grid !important;
+  display: grid !important;
+  -ms-grid-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+@media (min-width: 1200px) {
+  body .card-item {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 30%;
+            flex: 0 0 30%; /* 3 cards per row on large screens */
+    max-width: 30%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  body .card-item {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 48%;
+            flex: 0 0 48%; /* 2 cards per row on tablets */
+    max-width: 48%;
+  }
+}
+@media (max-width: 767px) {
+  body .card-item {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+            flex: 0 0 100%; /* 1 card per row on small screens */
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,46 @@
+.container {
+    max-width: 100%;
+}
+
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the boxes horizontally */
+    gap: 1rem; /* Space between boxes */
+    .card-item {
+        margin-bottom: 0rem;
+        .JobTitles{
+            background: #ccc;
+            font-size: 1.1rem;
+            color:#000;
+            padding: 1rem;
+        }
+        .job-card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 0px;
+            background-color: $w;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            .jobdetails{
+                padding: 1rem;
+                .links{
+                    background: #ccc;
+                }
+            }
+            p{
+                a {
+                    word-break: break-all; /* To prevent long URLs from overflowing */
+                }
+            }
+            .justify-content-end {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    }
+}
