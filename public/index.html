@@ -2,189 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cron Jobs Dashboard</title>
-    <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
-<div class="container">
+<div class="container mt-5">
     <h2 class="text-center">Cron Jobs Dashboard</h2>
 
-    <!-- Form for adding a new cron job -->
     <form id="cronForm" class="mb-4">
-        <div class="row g-3">
+        <div class="row">
             <div class="col-md-3">
-                <label for="minute" class="form-label">Minute Interval</label>
-                <input type="number" class="form-control" id="minute" placeholder="Enter minute interval">
+                <input type="text" id="name" class="form-control" placeholder="Cron Name" required>
             </div>
-            <div class="col-md-6">
-                <label for="url" class="form-label">URL</label>
-                <input type="url" class="form-control" id="url" placeholder="Enter URL">
+            <div class="col-md-3">
+                <input type="text" id="description" class="form-control" placeholder="Cron Job Description" required>
             </div>
-            <div class="col-md-3 d-flex align-items-end">
+            <div class="col-md-2">
+                <input type="number" id="minute" class="form-control" placeholder="Minute Interval" required>
+            </div>
+            <div class="col-md-4">
+                <input type="url" id="url" class="form-control" placeholder="URL" required>
+            </div>
+            <div class="col-md-12 mt-2">
                 <button type="submit" class="btn btn-primary w-100">Add Cron Job</button>
             </div>
         </div>
     </form>
 
-    <h3>Scheduled Cron Jobs</h3>
-    <table class="table table-striped" id="jobsTable">
+    <table class="table table-bordered" id="jobsTable">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>URL</th>
-            <th>Interval (Minutes)</th>
-            <th>Actions</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Cron Name</th>
+                <th>Description</th>
+                <th>URL</th>
+                <th>Interval (Minutes)</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody></tbody>
     </table>
-
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Cron Job</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editCronForm">
-                        <div class="mb-3">
-                            <label for="editUrl" class="form-label">URL</label>
-                            <input type="url" class="form-control" id="editUrl" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editMinute" class="form-label">Minute Interval</label>
-                            <input type="number" class="form-control" id="editMinute" required>
-                        </div>
-                        <input type="hidden" id="editJobId"> <!-- Hidden field to store the job ID -->
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="updateJob()">Save Changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-    let cronJobs = [];
-
-    const jobsTable = document.getElementById('jobsTable').querySelector('tbody');
-
-    // Function to load cron jobs
-    function loadJobs() {
-        fetch('/jobs')
-            .then(response => response.json())
-            .then(jobs => {
-                cronJobs = jobs; // Store jobs for later use in edit and delete functions
-                jobsTable.innerHTML = ''; // Clear existing rows
-
-                jobs.forEach(job => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${job.id}</td>
-                        <td>${job.url}</td>
-                        <td>${job.minute}</td>
-                        <td>
-                            <button class="btn btn-danger btn-sm" onclick="deleteJob(${job.id})">Delete</button>
-                            <button class="btn btn-warning btn-sm" onclick="editJob(${job.id})">Edit</button>
-                        </td>
-                    `;
-                    jobsTable.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error loading jobs:', error));
-    }
-
-    // Function to add a new cron job
-    document.getElementById('cronForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
+    document.getElementById('cronForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const description = document.getElementById('description').value;
         const minute = document.getElementById('minute').value;
         const url = document.getElementById('url').value;
 
-        fetch('/schedule', {
+        await fetch('/schedule', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ minute, url }),
-        })
-        .then(response => response.json())
-        .then(() => {
-            loadJobs(); // Reload the jobs list
-        })
-        .catch(error => console.error('Error adding job:', error));
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description, minute, url })
+        });
+        loadJobs();
     });
 
-    // Function to delete a cron job
-    function deleteJob(jobId) {
-        fetch(`/jobs/${jobId}`, { method: 'DELETE' })
-        .then(response => response.json())
-        .then(() => {
-            loadJobs(); // Reload the jobs list
-        })
-        .catch(error => console.error('Error deleting job:', error));
+    async function loadJobs() {
+        const response = await fetch('/jobs');
+        const jobs = await response.json();
+        const tableBody = document.getElementById('jobsTable').querySelector('tbody');
+        tableBody.innerHTML = jobs.map(job => `
+            <tr>
+                <td>${job.id}</td>
+                <td>${job.name}</td>
+                <td>${job.description}</td>
+                <td>${job.url}</td>
+                <td>${job.minute}</td>
+                <td>
+                    <button onclick="deleteJob(${job.id})" class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+        `).join('');
     }
 
-    // Function to edit a cron job (populate the form with the existing data)
-    function editJob(jobId) {
-        const job = cronJobs.find(job => job.id === jobId);
-
-        if (job) {
-            document.getElementById('editUrl').value = job.url;
-            document.getElementById('editMinute').value = job.minute;
-            document.getElementById('editJobId').value = jobId;
-
-            // Show the edit modal
-            const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-            editModal.show();
-        }
+    async function deleteJob(id) {
+        await fetch(`/jobs/${id}`, { method: 'DELETE' });
+        loadJobs();
     }
 
-    // Function to update a cron job
-    function updateJob() {
-        const jobId = document.getElementById('editJobId').value;
-        const url = document.getElementById('editUrl').value;
-        const minute = document.getElementById('editMinute').value;
-
-        fetch(`/jobs/${jobId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ url, minute }),
-        })
-        .then(response => response.json())
-        .then(() => {
-            // Close the edit modal
-            const editModal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
-            editModal.hide();
-
-            // Reload the page after changes are saved
-            loadJobs();
-        })
-        .catch(error => console.error('Error updating job:', error));
-    }
-
-    // Load cron jobs when the page is loaded
-    window.onload = loadJobs;
+    loadJobs();
 </script>
 </body>
 </html>
